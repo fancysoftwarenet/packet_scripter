@@ -2,9 +2,10 @@
 #define IFCONFIG_H
 
 #include <QWidget>
-#include <QFormLayout>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QFormLayout>
+#include <QPushButton>
 
 enum if_type
 {
@@ -34,6 +35,8 @@ private:
     QCheckBox* _debut;
 
     //Si SE
+    //TODO : Bouton pour fen de conf du Routage ;)
+    QPushButton* _routage;
 };
 
 #endif // IFCONFIG_H

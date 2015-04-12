@@ -29,7 +29,7 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _if->setTitle("Interface");
 
     _if_layout = new QVBoxLayout();
-    _if_config = new IfConfig(FA);
+    _if_config = new IfConfig(SE);
 
     _if_layout->addWidget(_if_config);
     _if->setLayout(_if_layout);
@@ -66,6 +66,4 @@ void CentralWidget::sl_change_equipement(QString s)
 
     _if_list = new If_List(s);
     _param_layout->addWidget(_if_list);
-
-    std::cout << "Equipement: " << s.toStdString() << std::endl;
 }
