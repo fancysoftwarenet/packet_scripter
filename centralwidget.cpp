@@ -31,9 +31,8 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _if->setTitle("Interface");
 
     _if_layout = new QVBoxLayout();
-    _if_config = new IfConfig(SE);
+    _if_config = NULL;
 
-    _if_layout->addWidget(_if_config);
     _if->setLayout(_if_layout);
 
     QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
@@ -75,9 +74,12 @@ void CentralWidget::sl_change_equipement(QString s)
 
 void CentralWidget::sl_if_conf_change(int id, enum if_type type)
 {
-    _if_layout->removeWidget(_if_config);
+    if (_if_config != NULL)
+    {
+        _if_layout->removeWidget(_if_config);
 
-    delete _if_config;
+        delete _if_config;
+    }
 
     _if_config = new IfConfig(type);
     _if_layout->addWidget(_if_config);
