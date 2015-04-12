@@ -8,6 +8,7 @@
 #include <QFormLayout>
 #include <QTextEdit>
 #include "if_list.h"
+#include "ifconfig.h"
 
 class CentralWidget : public QWidget
 {
@@ -24,6 +25,7 @@ private:
     QGroupBox* _param;
     QFormLayout* _param_layout;
     QComboBox* _equipement;
+    If_List* _if_list;
 
     QGroupBox* _script;
     QVBoxLayout* _script_layout;
@@ -31,7 +33,7 @@ private:
 
     QGroupBox* _if;
     QVBoxLayout* _if_layout;
-    If_List* _if_list;
+    IfConfig* _if_config;
 
     QHBoxLayout* _main_layout;
 };

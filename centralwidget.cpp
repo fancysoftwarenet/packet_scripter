@@ -27,7 +27,10 @@ CentralWidget::CentralWidget(QWidget *parent) :
         _if->setTitle("Interface");
 
         _if_layout = new QVBoxLayout();
+        _if_config = new IfConfig(FA);
 
+        _if_layout->addWidget(_if_config);
+        _if->setLayout(_if_layout);
 
 
 /** La GroupBox dans laquelle on affiche le script **/
