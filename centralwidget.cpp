@@ -23,7 +23,7 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _param->setLayout(_param_layout);
 
     QObject::connect(_equipement, SIGNAL(currentIndexChanged(QString)), this, SLOT(sl_change_equipement(QString)));
-    QObject::connect(_if_list, SIGNAL(si_clicked(int, enum if_type)), this, SLOT(sl_if_conf_change(int, enum if_type)));
+    QObject::connect(_if_list, SIGNAL(si_clicked(QString, int, enum if_type)), this, SLOT(sl_if_conf_change(QString, int, enum if_type)));
 
 
 /** La GroupBox dans laquelle on configure l'interface **/
@@ -34,8 +34,6 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _if_config = NULL;
 
     _if->setLayout(_if_layout);
-
-    QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
 
 
 /** La GroupBox dans laquelle on affiche le script **/
@@ -48,7 +46,12 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _texte->setReadOnly(true);
     _script->setLayout(_script_layout);
 
-    _script_layout->addWidget(_texte);
+    _selectionner = new QPushButton("Sélectionner tout");
+    QObject::connect(_selectionner, SIGNAL(clicked()), this, SLOT(sl_selectionner()));
+
+    _script_layout->addWidget(_texte, 5);
+    _script_layout->addWidget(_selectionner);
+
     _script->setLayout(_script_layout);
 
 
@@ -68,11 +71,11 @@ void CentralWidget::sl_change_equipement(QString s)
     delete _if_list;
 
     _if_list = new If_List(s);
-    QObject::connect(_if_list, SIGNAL(si_clicked(int, enum if_type)), this, SLOT(sl_if_conf_change(int, enum if_type)));
+    QObject::connect(_if_list, SIGNAL(si_clicked(QString, int, enum if_type)), this, SLOT(sl_if_conf_change(QString, int, enum if_type)));
     _param_layout->addWidget(_if_list);
 }
 
-void CentralWidget::sl_if_conf_change(int id, enum if_type type)
+void CentralWidget::sl_if_conf_change(QString nom, int id, enum if_type type)
 {
     if (_if_config != NULL)
     {
@@ -81,7 +84,7 @@ void CentralWidget::sl_if_conf_change(int id, enum if_type type)
         delete _if_config;
     }
 
-    _if_config = new IfConfig(type);
+    _if_config = new IfConfig(nom, type);
     _if_layout->addWidget(_if_config);
 
     QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
@@ -99,7 +102,16 @@ void CentralWidget::sl_genere_script()
             "login\n"
             "line vty 0-15\n"
             "password cisco\n"
-            "login\n";
+            "login\n"
+            "do wr\n"
+            "end\n"
+            "\n";
 
     _texte->setText(script);
+}
+
+void CentralWidget::sl_selectionner()
+{
+    _texte->selectAll();
+    _texte->setFocus();
 }

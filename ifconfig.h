@@ -2,6 +2,8 @@
 #define IFCONFIG_H
 
 #include <QWidget>
+#include <QLabel>
+#include <QSpacerItem>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QFormLayout>
@@ -12,7 +14,7 @@ class IfConfig : public QWidget
 {
     Q_OBJECT
 public:
-    explicit IfConfig(enum if_type type, QWidget *parent = 0);
+    explicit IfConfig(QString nom, if_type type, QWidget *parent = 0);
     
 signals:
     void si_modif();
@@ -23,8 +25,11 @@ public slots:
 private:
     QFormLayout* _layout;
 
+    QLabel* _nom;
+    QSpacerItem* _espace;
     QLineEdit* _ip;
     QLineEdit* _masque;
+    QCheckBox* _on;
 
     //Si FA
     QLineEdit* _passerelle;

@@ -48,12 +48,10 @@ If_List::If_List(QString equipement)
 
 void If_List::sl_if_param(int id)
 {
-    std::cout << "Deux premiers caractères: " << _v[id]->text().left(2).toStdString() << std::endl;
     if ( _v[id]->text().left(2) == "Se")
     {
-        std::cout << "Signal emis SE" << std::endl;
-        emit si_clicked(id, SE);
+        emit si_clicked(_v[id]->text(), id, SE);
     }
     else
-        emit si_clicked(id, FA);
+        emit si_clicked(_v[id]->text(), id, FA);
 }

@@ -1,9 +1,16 @@
 #include "ifconfig.h"
 
-IfConfig::IfConfig(enum if_type type, QWidget *parent) :
+IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
     QWidget(parent)
 {
     _layout = new QFormLayout();
+    _nom = new QLabel("<b><span style=\"color: green\">" + nom + "</span></b>");
+    _nom->setAlignment(Qt::AlignCenter);
+
+    _layout->addRow(_nom);
+
+    _espace = new QSpacerItem(1, 25);
+    _layout->addItem(_espace);
 
     _ip = new QLineEdit();
     _ip->setInputMask("000.000.000.000;");
@@ -43,6 +50,10 @@ IfConfig::IfConfig(enum if_type type, QWidget *parent) :
 
         //TODO: Connecter le click à un show de la fen de conf. En EIGRP, penser à demander le numéro d'AS (spinbox would be nice)
     }
+
+    _on = new QCheckBox();
+    _layout->addRow("Allumer l'interface ", _on);
+    QObject::connect(_on, SIGNAL(clicked()), this, SLOT(sl_modif()));
 
     this->setLayout(_layout);
 }
