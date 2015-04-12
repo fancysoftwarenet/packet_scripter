@@ -25,16 +25,17 @@ If_List::If_List(QString equipement)
         _n = 4;
         QMessageBox::information(this, "Attention", "Veillez à bien insérer la carte HWIC-2T dans le slot en bas à droite ;)");
 
-        for ( int i = 0 ; i < 2 ; i++ )
+        for ( int i = 0 ; i < _n ; i++ )
         {
-            IfBouton* b = new IfBouton("Serial 0/0/" + QString::number(i), i);
-            QObject::connect(b, SIGNAL(clicked(int)), this, SLOT(sl_if_param(int)));
-        }
+            IfBouton* b = NULL;
 
-        for ( int i = 0 ; i < 2 ; i++ )
-        {
-            IfBouton* b = new IfBouton("Fast Ethernet 0/" + QString::number(i), i+2);
+            if ( i < 2 )
+                b = new IfBouton("Serial 0/0/" + QString::number(i), i);
+            else
+                b = new IfBouton("Fast Ethernet 0/" + QString::number(i-2), i);
+
             QObject::connect(b, SIGNAL(clicked(int)), this, SLOT(sl_if_param(int)));
+            _v.push_back(b);
         }
     }
 

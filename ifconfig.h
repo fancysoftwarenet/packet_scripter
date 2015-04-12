@@ -25,10 +25,15 @@ public slots:
     
 private:
     QFormLayout* _layout;
+
     QLineEdit* _ip;
     QLineEdit* _masque;
+
+    //Si FA
     QLineEdit* _passerelle;
     QCheckBox* _debut;
+
+    //Si SE
 };
 
 #endif // IFCONFIG_H

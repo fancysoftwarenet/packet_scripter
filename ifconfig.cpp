@@ -6,16 +6,16 @@ IfConfig::IfConfig(enum if_type type, QWidget *parent) :
     _layout = new QFormLayout();
 
     _ip = new QLineEdit();
-    _ip->setPlaceholderText("192.168.0.x");
     _ip->setInputMask("000.000.000.000;");
+    _ip->setPlaceholderText("192.168.0.50");
 
     _masque = new QLineEdit();
-    _masque->setPlaceholderText("255.255.255.0");
     _masque->setInputMask("000.000.000.000;");
+    _masque->setPlaceholderText("255.255.255.0");
 
     _passerelle = new QLineEdit();
-    _passerelle->setPlaceholderText("192.168.0.254");
     _passerelle->setInputMask("000.000.000.000;");
+    _passerelle->setPlaceholderText("192.168.0.254");
 
     _debut = new QCheckBox();
 

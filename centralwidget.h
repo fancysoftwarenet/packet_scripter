@@ -19,7 +19,7 @@ public:
 signals:
     
 public slots:
-    void sl_change_equipement();
+    void sl_change_equipement(QString s);
 
 private:
     QGroupBox* _param;

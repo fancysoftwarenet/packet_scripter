@@ -22,15 +22,17 @@ CentralWidget::CentralWidget(QWidget *parent) :
 
     _param->setLayout(_param_layout);
 
+    QObject::connect(_equipement, SIGNAL(currentIndexChanged(QString)), this, SLOT(sl_change_equipement(QString)));
+
 /** La GroupBox dans laquelle on configure l'interface **/
-        _if = new QGroupBox();
-        _if->setTitle("Interface");
+    _if = new QGroupBox();
+    _if->setTitle("Interface");
 
-        _if_layout = new QVBoxLayout();
-        _if_config = new IfConfig(FA);
+    _if_layout = new QVBoxLayout();
+    _if_config = new IfConfig(FA);
 
-        _if_layout->addWidget(_if_config);
-        _if->setLayout(_if_layout);
+    _if_layout->addWidget(_if_config);
+    _if->setLayout(_if_layout);
 
 
 /** La GroupBox dans laquelle on affiche le script **/
@@ -56,7 +58,14 @@ CentralWidget::CentralWidget(QWidget *parent) :
     this->setLayout(_main_layout);
 }
 
-void CentralWidget::sl_change_equipement()
+void CentralWidget::sl_change_equipement(QString s)
 {
-    _if_list = new If_List(_equipement->currentText());
+
+    _param_layout->removeWidget(_if_list);
+    delete _if_list;
+
+    _if_list = new If_List(s);
+    _param_layout->addWidget(_if_list);
+
+    std::cout << "Equipement: " << s.toStdString() << std::endl;
 }
