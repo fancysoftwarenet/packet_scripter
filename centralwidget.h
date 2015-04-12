@@ -20,7 +20,7 @@ signals:
     
 public slots:
     void sl_change_equipement(QString s);
-
+    void sl_if_conf_change(int, enum if_type);
 private:
     QGroupBox* _param;
     QFormLayout* _param_layout;

@@ -28,7 +28,13 @@ IfConfig::IfConfig(enum if_type type, QWidget *parent) :
     else if ( type == SE )
     {
         _routage = new QPushButton("Routage...");
-        _layout->addWidget(_routage);
+        _layout->addRow(_routage);
+
+        _dhcp = new QPushButton("DHCP...");
+        _layout->addRow(_dhcp);
+
+        _nat = new QPushButton("NAT...");
+        _layout->addRow(_nat);
 
         //TODO: Connecter le click à un show de la fen de conf. En EIGRP, penser à demander le numéro d'AS (spinbox would be nice)
     }

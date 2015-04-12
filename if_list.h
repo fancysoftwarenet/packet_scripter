@@ -16,6 +16,9 @@ class If_List : public QWidget
 public:
     If_List(QString equipement);
 
+signals:
+    void si_clicked(int, enum if_type);
+
 public slots:
     void sl_if_param(int id);
 

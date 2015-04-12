@@ -23,6 +23,8 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _param->setLayout(_param_layout);
 
     QObject::connect(_equipement, SIGNAL(currentIndexChanged(QString)), this, SLOT(sl_change_equipement(QString)));
+    QObject::connect(_if_list, SIGNAL(si_clicked(int, enum if_type)), this, SLOT(sl_if_conf_change(int, enum if_type)));
+
 
 /** La GroupBox dans laquelle on configure l'interface **/
     _if = new QGroupBox();
@@ -48,8 +50,6 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _script->setLayout(_script_layout);
 
 
-
-
 /** Le layout principal dans lequel on met nos trois GroupBox **/
     _main_layout->addWidget(_param);
     _main_layout->addWidget(_if);
@@ -65,5 +65,16 @@ void CentralWidget::sl_change_equipement(QString s)
     delete _if_list;
 
     _if_list = new If_List(s);
+    QObject::connect(_if_list, SIGNAL(si_clicked(int, enum if_type)), this, SLOT(sl_if_conf_change(int, enum if_type)));
     _param_layout->addWidget(_if_list);
+}
+
+void CentralWidget::sl_if_conf_change(int id, enum if_type type)
+{
+    _if_layout->removeWidget(_if_config);
+    delete _if_config;
+
+    std::cout << "Appel a sl_if_config_change() OK" << std::endl << "type: " << type << std::endl;
+    _if_config = new IfConfig(type);
+    _if_layout->addWidget(_if_config);
 }

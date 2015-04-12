@@ -6,11 +6,7 @@
 #include <QCheckBox>
 #include <QFormLayout>
 #include <QPushButton>
-
-enum if_type
-{
-    FA, SE
-};
+#include "enums.h"
 
 class IfConfig : public QWidget
 {
@@ -37,6 +33,8 @@ private:
     //Si SE
     //TODO : Bouton pour fen de conf du Routage ;)
     QPushButton* _routage;
+    QPushButton* _dhcp;
+    QPushButton* _nat;
 };
 
 #endif // IFCONFIG_H

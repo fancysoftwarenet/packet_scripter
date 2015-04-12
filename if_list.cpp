@@ -15,7 +15,6 @@ If_List::If_List(QString equipement)
         for ( int i = 0 ; i < _n ; i++ )
         {
             IfBouton* bouton = new IfBouton("Fast Ethernet 0/" + QString::number(i+1), i);
-            QObject::connect(bouton, SIGNAL(clicked(int)), this, SLOT(sl_if_param(int)));
             _v.push_back(bouton);
         }
     }
@@ -34,18 +33,27 @@ If_List::If_List(QString equipement)
             else
                 b = new IfBouton("Fast Ethernet 0/" + QString::number(i-2), i);
 
-            QObject::connect(b, SIGNAL(clicked(int)), this, SLOT(sl_if_param(int)));
             _v.push_back(b);
         }
     }
 
     for ( int i = 0 ; i < _v.size() ; i++ )
+    {
+        QObject::connect(_v[i], SIGNAL(clicked(int)), this, SLOT(sl_if_param(int)));
         _layout->addWidget(_v[i]);
+    }
 
     this->setLayout(_layout);
 }
 
 void If_List::sl_if_param(int id)
 {
-    std::cout << "id du bouton cliqué: " << id << std::endl;
+    std::cout << "Deux premiers caractères: " << _v[id]->text().left(2).toStdString() << std::endl;
+    if ( _v[id]->text().left(2) == "Se")
+    {
+        std::cout << "Signal emis SE" << std::endl;
+        emit si_clicked(id, SE);
+    }
+    else
+        emit si_clicked(id, FA);
 }

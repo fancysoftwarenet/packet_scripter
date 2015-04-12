@@ -3,6 +3,7 @@
 
 #include <QPushButton>
 #include <QString>
+#include "enums.h"
 
 class IfBouton : public QPushButton
 {
