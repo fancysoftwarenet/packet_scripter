@@ -36,6 +36,8 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _if_layout->addWidget(_if_config);
     _if->setLayout(_if_layout);
 
+    QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
+
 
 /** La GroupBox dans laquelle on affiche le script **/
     _script = new QGroupBox();
@@ -44,6 +46,7 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _script_layout = new QVBoxLayout();
 
     _texte = new QTextEdit();
+    _texte->setReadOnly(true);
     _script->setLayout(_script_layout);
 
     _script_layout->addWidget(_texte);
@@ -56,6 +59,7 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _main_layout->addWidget(_script);
 
     this->setLayout(_main_layout);
+    this->sl_genere_script();
 }
 
 void CentralWidget::sl_change_equipement(QString s)
@@ -72,9 +76,28 @@ void CentralWidget::sl_change_equipement(QString s)
 void CentralWidget::sl_if_conf_change(int id, enum if_type type)
 {
     _if_layout->removeWidget(_if_config);
+
     delete _if_config;
 
-    std::cout << "Appel a sl_if_config_change() OK" << std::endl << "type: " << type << std::endl;
     _if_config = new IfConfig(type);
     _if_layout->addWidget(_if_config);
+
+    QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
+}
+
+void CentralWidget::sl_genere_script()
+{
+    //TODO
+    QString script = "\nen\n"
+            "conf t\n"
+            "no ip domain-l\n"
+            "enable secret class"
+            "line con0\n"
+            "password cisco\n"
+            "login\n"
+            "line vty 0-15\n"
+            "password cisco\n"
+            "login\n";
+
+    _texte->setText(script);
 }

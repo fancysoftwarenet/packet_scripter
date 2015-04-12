@@ -9,11 +9,13 @@ IfConfig::IfConfig(enum if_type type, QWidget *parent) :
     _ip->setInputMask("000.000.000.000;");
     _ip->setPlaceholderText("192.168.0.50");
     _layout->addRow("Adresse ip: ", _ip);
+    connect(_ip, SIGNAL(editingFinished()), this, SLOT(sl_modif()));
 
     _masque = new QLineEdit();
     _masque->setInputMask("000.000.000.000;");
     _masque->setPlaceholderText("255.255.255.0");
     _layout->addRow("Masque: ", _masque);
+    connect(_masque, SIGNAL(editingFinished()), this, SLOT(sl_modif()));
 
     if ( type == FA )
     {
@@ -21,8 +23,11 @@ IfConfig::IfConfig(enum if_type type, QWidget *parent) :
         _passerelle->setInputMask("000.000.000.000;");
         _passerelle->setPlaceholderText("192.168.0.254");
         _layout->addRow("Passerelle par défaut: ", _passerelle);
+        connect(_passerelle, SIGNAL(editingFinished()), this, SLOT(sl_modif()));
 
         _debut = new QCheckBox();
+        connect(_debut, SIGNAL(clicked()), this, SLOT(sl_modif()));
+
         _layout->addRow("Passerelle en début de réseau", _debut);
     }
     else if ( type == SE )
