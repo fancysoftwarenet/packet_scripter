@@ -9,6 +9,7 @@
 #include <QFormLayout>
 #include <QPushButton>
 #include "enums.h"
+#include "dbmanager.h"
 
 class IfConfig : public QWidget
 {
@@ -21,8 +22,11 @@ signals:
 
 public slots:
     void sl_modif();
-    
+    void sl_save_conf();
+
 private:
+    DBManager _dm;
+
     QFormLayout* _layout;
 
     QLabel* _nom;
@@ -36,10 +40,11 @@ private:
     QCheckBox* _debut;
 
     //Si SE
-    //TODO : Bouton pour fen de conf du Routage ;)
     QPushButton* _routage;
     QPushButton* _dhcp;
     QPushButton* _nat;
+
+    QPushButton* _sauvegarder;
 };
 
 #endif // IFCONFIG_H

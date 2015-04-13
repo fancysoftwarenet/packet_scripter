@@ -1,7 +1,7 @@
 #include "ifconfig.h"
 
 IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent), _dm()
 {
     _layout = new QFormLayout();
     _nom = new QLabel("<b><span style=\"color: green\">" + nom + "</span></b>");
@@ -52,8 +52,12 @@ IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
     }
 
     _on = new QCheckBox();
-    _layout->addRow("Allumer l'interface ", _on);
     QObject::connect(_on, SIGNAL(clicked()), this, SLOT(sl_modif()));
+    _layout->addRow("Allumer l'interface ", _on);
+
+    _sauvegarder = new QPushButton("Enregistrer");
+    QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_save_conf()));
+    _layout->addRow(_sauvegarder);
 
     this->setLayout(_layout);
 }
@@ -61,4 +65,14 @@ IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
 void IfConfig::sl_modif()
 {
     emit si_modif();
+}
+
+void IfConfig::sl_save_conf()
+{
+    if ( _dm.get("nom", _nom->text()) != NULL )
+    {
+
+    }
+
+    _dm.put(_nom->text(), _ip->text(), _masque->text(), _passerelle->text());
 }
