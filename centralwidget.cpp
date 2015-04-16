@@ -3,6 +3,9 @@
 CentralWidget::CentralWidget(QWidget *parent) :
     QWidget(parent)
 {
+    DBManager dm;
+    dm.clearTable("interfaces");
+
     _main_layout = new QHBoxLayout();
 
 /** La GroupBox paramètres **/
@@ -41,19 +44,11 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _script->setTitle("Script de configuration");
 
     _script_layout = new QVBoxLayout();
+    _sw = new ScriptWidget();
 
-    _texte = new QTextEdit();
-    _texte->setReadOnly(true);
-    _script->setLayout(_script_layout);
-
-    _selectionner = new QPushButton("Sélectionner tout");
-    QObject::connect(_selectionner, SIGNAL(clicked()), this, SLOT(sl_selectionner()));
-
-    _script_layout->addWidget(_texte, 5);
-    _script_layout->addWidget(_selectionner);
+    _script_layout->addWidget(_sw);
 
     _script->setLayout(_script_layout);
-
 
 /** Le layout principal dans lequel on met nos trois GroupBox **/
     _main_layout->addWidget(_param);
@@ -61,7 +56,6 @@ CentralWidget::CentralWidget(QWidget *parent) :
     _main_layout->addWidget(_script);
 
     this->setLayout(_main_layout);
-    this->sl_genere_script();
 }
 
 void CentralWidget::sl_change_equipement(QString s)
@@ -89,31 +83,5 @@ void CentralWidget::sl_if_conf_change(QString nom, int id, enum if_type type)
     _if_config = new IfConfig(nom, type);
     _if_layout->addWidget(_if_config);
 
-    QObject::connect(_if_config, SIGNAL(si_modif()), this, SLOT(sl_genere_script()));
-}
-
-void CentralWidget::sl_genere_script()
-{
-    //TODO
-    QString script = "\nen\n"
-            "conf t\n"
-            "no ip domain-l\n"
-            "enable secret class\n"
-            "line con0\n"
-            "password cisco\n"
-            "login\n"
-            "line vty 0-15\n"
-            "password cisco\n"
-            "login\n"
-            "do wr\n"
-            "end\n"
-            "\n";
-
-    _texte->setText(script);
-}
-
-void CentralWidget::sl_selectionner()
-{
-    _texte->selectAll();
-    _texte->setFocus();
+    QObject::connect(_if_config, SIGNAL(si_modif()), _sw, SLOT(sl_genere_script()));
 }

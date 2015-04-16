@@ -25,11 +25,11 @@ DBManager::DBManager()
         QMessageBox::critical(NULL, "Erreur critique", "Impossible de créer la table pour la base de données, le programme peut ne pas fonctionner correctement");
 }
 
-QString DBManager::get(QString colonne, QString valeur)
+QString DBManager::get(QString colonne, QString interface)
 {
     QSqlQuery req(_bdd);
 
-    if ( req.exec("SELECT " + colonne + " FROM interfaces WHERE nom='" + valeur + "'") && req.first() )
+    if ( req.exec("SELECT " + colonne + " FROM interfaces WHERE nom='" + interface + "'") && req.first() )
     {
         return req.value(0).toString();
     }

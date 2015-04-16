@@ -9,6 +9,7 @@
 #include <QTextEdit>
 #include "if_list.h"
 #include "ifconfig.h"
+#include "scriptwidget.h"
 
 class CentralWidget : public QWidget
 {
@@ -21,8 +22,6 @@ signals:
 public slots:
     void sl_change_equipement(QString s);
     void sl_if_conf_change(QString, int, enum if_type);
-    void sl_genere_script();
-    void sl_selectionner();
 
 private:
     QGroupBox* _param;
@@ -36,8 +35,7 @@ private:
 
     QGroupBox* _script;
     QVBoxLayout* _script_layout;
-    QTextEdit* _texte;
-    QPushButton* _selectionner;
+    ScriptWidget* _sw;
 
     QHBoxLayout* _main_layout;
 };

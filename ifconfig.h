@@ -14,6 +14,7 @@
 class IfConfig : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit IfConfig(QString nom, if_type type, QWidget *parent = 0);
     
@@ -25,6 +26,7 @@ public slots:
     void sl_save_conf();
 
 private:
+    if_type _type;
     DBManager _dm;
 
     QFormLayout* _layout;
