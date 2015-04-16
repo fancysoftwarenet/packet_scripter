@@ -17,7 +17,7 @@ public:
     bool update(QString nom, QString ip, QString masque, QString passerelle);
     bool clearTable(QString table = "interfaces");
     QString get(QString colonne, QString interface);
-    QString get(QString colonne, int interface_number); //TODO
+    QString get(QString colonne, int line); //TODO
     ~DBManager();
 
 private:

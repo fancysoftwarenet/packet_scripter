@@ -1,7 +1,7 @@
 #include "ifconfig.h"
 
-IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
-    QWidget(parent), _dm(), _type(type)
+IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
+    QWidget(parent), _dm(), _type(type), _id(id)
 {
     _layout = new QFormLayout();
     _nom = new QLabel("<b><span style=\"color: green\">" + nom + "</span></b>");
@@ -59,13 +59,13 @@ IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
     QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_save_conf()));
     _layout->addRow(_sauvegarder);
 
-    if ( _dm.get("nom", _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 11)) != NULL )
+    if ( _dm.get("nom", getNom()) != NULL )
     {
-        _ip->setText( _dm.get("ip", _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 11)));
-        _masque->setText( _dm.get("masque", _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 11)));
+        _ip->setText( _dm.get("ip", getNom()));
+        _masque->setText( _dm.get("masque", getNom()));
 
         if ( type == FA )
-            _passerelle->setText(_dm.get("passerelle", _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 11)));
+            _passerelle->setText(_dm.get("passerelle", getNom()));
     }
     this->setLayout(_layout);
 }
@@ -75,22 +75,30 @@ void IfConfig::sl_modif()
     emit si_modif();
 }
 
+#include <iostream>
+
 void IfConfig::sl_save_conf()
 {
-    if ( _dm.get("nom", _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 11)) != NULL )
+    if ( _dm.get("nom", getNom()) != NULL )
     {
         if ( _type == FA )
-            _dm.update(_nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 41), _ip->text(), _masque->text(), _passerelle->text());
+            _dm.update(getNom(), _ip->text(), _masque->text(), _passerelle->text());
         else
-            _dm.update(_nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 41), _ip->text(), _masque->text(), "...");
+            _dm.update(getNom(), _ip->text(), _masque->text(), "...");
     }
     else
     {
         if ( _type == FA )
-            _dm.put(_nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 41), _ip->text(), _masque->text(), _passerelle->text());
+            _dm.put(_id, getNom(), _ip->text(), _masque->text(), _passerelle->text());
         else
-            _dm.put(_nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 41), _ip->text(), _masque->text(), "...");
+            _dm.put(_id, getNom(), _ip->text(), _masque->text(), "...");
     }
 
+    std::cout << _dm.get("ip", 0).toStdString() << std::endl;
 
+}
+
+QString IfConfig::getNom()
+{
+    return _nom->text().right(_nom->text().length() - 30).left(_nom->text().length() - 41);
 }

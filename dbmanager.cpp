@@ -37,6 +37,21 @@ QString DBManager::get(QString colonne, QString interface)
     return NULL;
 }
 
+QString DBManager::get(QString colonne, int line)
+{
+    QSqlQuery req;
+
+    if ( req.exec("SELECT " + colonne + " FROM interfaces") && req.first() )
+    {
+        for ( int i = 0 ; i < line ; i++ )
+            req.next();
+
+        return req.value(0).toString();
+    }
+
+    return NULL;
+}
+
 bool DBManager::put(QString nom, QString ip, QString masque, QString passerelle)
 {
     QSqlQuery req(_bdd);
@@ -81,6 +96,15 @@ bool DBManager::clearTable(QString table)
     QSqlQuery req(_bdd);
 
     return req.exec("DELETE FROM " + table);
+}
+
+int DBManager::getCount(QString table)
+{
+    QSqlQuery req;
+    if ( req.exec("SELECT COUNT(id) FROM " + table) && req.first() )
+        return req.value(0).toInt();
+    else
+        return -1;
 }
 
 DBManager::~DBManager()

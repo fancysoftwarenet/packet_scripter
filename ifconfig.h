@@ -16,8 +16,8 @@ class IfConfig : public QWidget
     Q_OBJECT
 
 public:
-    explicit IfConfig(QString nom, if_type type, QWidget *parent = 0);
-    
+    explicit IfConfig(QString nom, int id, if_type type, QWidget *parent = 0);
+    QString getNom();
 signals:
     void si_modif();
 
@@ -26,6 +26,7 @@ public slots:
     void sl_save_conf();
 
 private:
+    int _id;
     if_type _type;
     DBManager _dm;
 

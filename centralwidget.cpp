@@ -65,6 +65,11 @@ void CentralWidget::sl_change_equipement(QString s)
 
     _param_layout->removeWidget(_if_list);
     delete _if_list;
+    if ( _if_config != NULL )
+    {
+        _if_layout->removeWidget(_if_config);
+        delete _if_config;
+    }
 
     _if_list = new If_List(s);
     QObject::connect(_if_list, SIGNAL(si_clicked(QString, int, enum if_type)), this, SLOT(sl_if_conf_change(QString, int, enum if_type)));
@@ -80,7 +85,7 @@ void CentralWidget::sl_if_conf_change(QString nom, int id, enum if_type type)
         delete _if_config;
     }
 
-    _if_config = new IfConfig(nom, type);
+    _if_config = new IfConfig(nom, id, type);
     _if_layout->addWidget(_if_config);
 
     QObject::connect(_if_config, SIGNAL(si_modif()), _sw, SLOT(sl_genere_script()));
