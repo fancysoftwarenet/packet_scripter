@@ -11,11 +11,13 @@ public:
     // TODO: clearDB(); update();
 
     explicit DBManager();
-    QString get(QString colonne, QString nom);
-    bool put(QString nom, QString ip, QString masque, QString passerelle);
     bool put(int id, QString nom, QString ip, QString masque, QString passerelle);
+    bool put(QString nom, QString ip, QString masque, QString passerelle);
+    bool update(QString nom, QString ip, QString masque, QString passerelle);
     bool clearTable(QString table = "interfaces");
+    QString get(QString colonne, QString valeur);
     ~DBManager();
+
 private:
     QSqlDatabase _bdd;
 };

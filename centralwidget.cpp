@@ -66,6 +66,8 @@ CentralWidget::CentralWidget(QWidget *parent) :
 
 void CentralWidget::sl_change_equipement(QString s)
 {
+    DBManager dm;
+    dm.clearTable("interfaces");
 
     _param_layout->removeWidget(_if_list);
     delete _if_list;
@@ -96,7 +98,7 @@ void CentralWidget::sl_genere_script()
     QString script = "\nen\n"
             "conf t\n"
             "no ip domain-l\n"
-            "enable secret class"
+            "enable secret class\n"
             "line con0\n"
             "password cisco\n"
             "login\n"

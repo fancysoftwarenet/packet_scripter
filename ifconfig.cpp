@@ -59,6 +59,14 @@ IfConfig::IfConfig(QString nom, enum if_type type, QWidget *parent) :
     QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_save_conf()));
     _layout->addRow(_sauvegarder);
 
+    if ( _dm.get("nom", _nom->text()) != NULL )
+    {
+        _ip->setText( _dm.get("ip", _nom->text()));
+        _masque->setText( _dm.get("masque", _nom->text()));
+
+        if ( type == FA )
+            _passerelle->setText(_dm.get("passerelle", _nom->text()));
+    }
     this->setLayout(_layout);
 }
 
@@ -70,9 +78,7 @@ void IfConfig::sl_modif()
 void IfConfig::sl_save_conf()
 {
     if ( _dm.get("nom", _nom->text()) != NULL )
-    {
-
-    }
-
-    _dm.put(_nom->text(), _ip->text(), _masque->text(), _passerelle->text());
+        _dm.update(_nom->text(), _ip->text(), _masque->text(), _passerelle->text());
+    else
+        _dm.put(_nom->text(), _ip->text(), _masque->text(), _passerelle->text());
 }
