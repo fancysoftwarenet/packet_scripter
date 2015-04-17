@@ -57,6 +57,7 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
 
     _sauvegarder = new QPushButton("Enregistrer");
     QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_save_conf()));
+    QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_modif()));
     _layout->addRow(_sauvegarder);
 
     if ( _dm.get("nom", getNom()) != NULL )
@@ -72,6 +73,7 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
 
 void IfConfig::sl_modif()
 {
+    sl_save_conf();
     emit si_modif();
 }
 
@@ -93,9 +95,6 @@ void IfConfig::sl_save_conf()
         else
             _dm.put(_id, getNom(), _ip->text(), _masque->text(), "...");
     }
-
-    std::cout << _dm.get("ip", 0).toStdString() << std::endl;
-
 }
 
 QString IfConfig::getNom()

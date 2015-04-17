@@ -11,7 +11,7 @@ public:
     // TODO: clearDB(); update();
 
     explicit DBManager();
-    int getCount(QString table); //TODO
+    int getCount(QString table = "interfaces"); //TODO
     bool put(int id, QString nom, QString ip, QString masque, QString passerelle);
     bool put(QString nom, QString ip, QString masque, QString passerelle);
     bool update(QString nom, QString ip, QString masque, QString passerelle);
