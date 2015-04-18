@@ -73,7 +73,6 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
 
 void IfConfig::sl_modif()
 {
-    sl_save_conf();
     emit si_modif();
 }
 
@@ -95,6 +94,8 @@ void IfConfig::sl_save_conf()
         else
             _dm.put(_id, getNom(), _ip->text(), _masque->text(), "...");
     }
+
+    emit si_modif();
 }
 
 QString IfConfig::getNom()

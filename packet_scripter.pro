@@ -6,7 +6,8 @@ SOURCES += \
     ifbouton.cpp \
     ifconfig.cpp \
     dbmanager.cpp \
-    scriptwidget.cpp
+    scriptwidget.cpp \
+    eigrpwidget.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -16,6 +17,7 @@ HEADERS += \
     ifconfig.h \
     dbmanager.h \
     enums.h \
-    scriptwidget.h
+    scriptwidget.h \
+    eigrpwidget.h
 
 QT += sql

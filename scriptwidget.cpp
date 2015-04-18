@@ -27,7 +27,7 @@ void ScriptWidget::sl_genere_script()
             "conf t\n"
             "no ip domain-l\n"
             "enable secret class\n"
-            "line con0\n"
+            "line con 0\n"
             "password cisco\n"
             "login\n"
             "line vty 0-15\n"
