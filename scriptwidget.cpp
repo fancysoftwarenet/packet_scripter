@@ -40,14 +40,14 @@ void ScriptWidget::sl_genere_script()
     {
         QString if_name = "";
 
-        if_name = _dm.get("nom", i).left(2).toLower();
+        if_name = _dm.getInterface("nom", i).left(2).toLower();
         if ( if_name == "fa" )
-            if_name += " " + _dm.get("nom", i).right(3);
+            if_name += " " + _dm.getInterface("nom", i).right(3);
         else if ( if_name == "se" )
-            if_name += " " + _dm.get("nom", i).right(5);
+            if_name += " " + _dm.getInterface("nom", i).right(5);
 
         script += "in " + if_name + "\n";
-        script += "ip ad " + _dm.get("ip", i) + " " + _dm.get("masque", i) + "\n";
+        script += "ip ad " + _dm.getInterface("ip", i) + " " + _dm.getInterface("masque", i) + "\n";
         script += "no sh\n";
     }
 

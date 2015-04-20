@@ -16,7 +16,7 @@ public:
 signals:
     
 public slots:
-    
+
 private:
     QHBoxLayout* _layout;
     QLabel* _dst_ip_label;

@@ -49,7 +49,7 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
         _nat = new QPushButton("NAT...");
         _layout->addRow(_nat);
 
-        //TODO: Connecter le click à un show de la fen de conf. En EIGRP, penser à demander le numéro d'AS (spinbox would be nice)
+        //TODO: Connecter le click à un show de la fen de conf. FenDhcp & FenNat restants
     }
 
     _on = new QCheckBox();
@@ -61,13 +61,13 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
     QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_modif()));
     _layout->addRow(_sauvegarder);
 
-    if ( _dm.get("nom", getNom()) != NULL )
+    if ( _dm.getInterface("nom", getNom()) != NULL )
     {
-        _ip->setText( _dm.get("ip", getNom()));
-        _masque->setText( _dm.get("masque", getNom()));
+        _ip->setText( _dm.getInterface("ip", getNom()));
+        _masque->setText( _dm.getInterface("masque", getNom()));
 
         if ( type == FA )
-            _passerelle->setText(_dm.get("passerelle", getNom()));
+            _passerelle->setText(_dm.getInterface("passerelle", getNom()));
     }
     this->setLayout(_layout);
 }
@@ -81,7 +81,7 @@ void IfConfig::sl_modif()
 
 void IfConfig::sl_save_conf()
 {
-    if ( _dm.get("nom", getNom()) != NULL )
+    if ( _dm.getInterface("nom", getNom()) != NULL )
     {
         if ( _type == FA )
             _dm.update(getNom(), _ip->text(), _masque->text(), _passerelle->text());
@@ -91,9 +91,9 @@ void IfConfig::sl_save_conf()
     else
     {
         if ( _type == FA )
-            _dm.put(_id, getNom(), _ip->text(), _masque->text(), _passerelle->text());
+            _dm.putInterface(_id, getNom(), _ip->text(), _masque->text(), _passerelle->text());
         else
-            _dm.put(_id, getNom(), _ip->text(), _masque->text(), "...");
+            _dm.putInterface(_id, getNom(), _ip->text(), _masque->text(), "...");
     }
 
     emit si_modif();

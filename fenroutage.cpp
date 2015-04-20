@@ -18,7 +18,7 @@ FenRoutage::FenRoutage(QWidget *parent) :
 
 void FenRoutage::sl_ajouter()
 {
-    _routes.push_back(new RouteWidget());
+    _routes.push_back(new RouteWidget(getNbRoutes()));
     _layout->removeWidget(_ajouter);
     _layout->addWidget(_routes[_routes.size()-1]);
     _layout->addWidget(_ajouter);
