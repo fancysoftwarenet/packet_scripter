@@ -1,7 +1,7 @@
 #include "routewidget.h"
 
-RouteWidget::RouteWidget(QWidget *parent) :
-    QWidget(parent)
+RouteWidget::RouteWidget(int id, QWidget *parent) :
+    QWidget(parent), _id(id)
 {
     _layout = new QHBoxLayout();
 

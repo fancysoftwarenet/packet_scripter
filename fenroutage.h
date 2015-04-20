@@ -11,11 +11,13 @@ class FenRoutage : public QWidget
     Q_OBJECT
 public:
     explicit FenRoutage(QWidget *parent = 0);
-    
+    int getNbRoutes();
+
 signals:
     
 public slots:
-    
+    void sl_ajouter();
+
 private:
     QVBoxLayout* _layout;
     std::vector<RouteWidget*> _routes;

@@ -11,7 +11,7 @@ class RouteWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RouteWidget(QWidget *parent = 0);
+    explicit RouteWidget(int id, QWidget *parent = 0);
 
 signals:
     
@@ -19,6 +19,8 @@ public slots:
     void sl_prot_change(int a);
 
 private:
+    int _id;
+
     QHBoxLayout* _layout;
 
     QComboBox* _protocole;
