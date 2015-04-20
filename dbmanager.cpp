@@ -9,6 +9,7 @@
 DBManager::DBManager()
 {
     _bdd = QSqlDatabase::addDatabase("QSQLITE");
+
     _bdd.setHostName("localhost");
     _bdd.setDatabaseName("packet_scripter");
     _bdd.setUserName("root");
@@ -17,6 +18,7 @@ DBManager::DBManager()
     if ( ! _bdd.open() )
     {
         QMessageBox::critical(NULL, "Attention", "Il y a eu une erreur à l'ouverture de la base de données.\n\n" + _bdd.lastError().text());
+        exit(-1);
     }
 
     QSqlQuery req(_bdd);

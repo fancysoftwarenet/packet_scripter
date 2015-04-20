@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include "enums.h"
 #include "dbmanager.h"
+#include "fenroutage.h"
 
 class IfConfig : public QWidget
 {
@@ -24,6 +25,7 @@ signals:
 public slots:
     void sl_modif();
     void sl_save_conf();
+    void sl_routage();
 
 private:
     int _id;
@@ -46,6 +48,7 @@ private:
     QPushButton* _routage;
     QPushButton* _dhcp;
     QPushButton* _nat;
+    FenRoutage* _fen_routage;
 
     QPushButton* _sauvegarder;
 };

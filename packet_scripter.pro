@@ -8,7 +8,9 @@ SOURCES += \
     dbmanager.cpp \
     scriptwidget.cpp \
     eigrpwidget.cpp \
-    staticwidget.cpp
+    staticwidget.cpp \
+    fenroutage.cpp \
+    routewidget.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -20,6 +22,8 @@ HEADERS += \
     enums.h \
     scriptwidget.h \
     eigrpwidget.h \
-    staticwidget.h
+    staticwidget.h \
+    fenroutage.h \
+    routewidget.h
 
 QT += sql

@@ -17,12 +17,16 @@ StaticWidget::StaticWidget(QWidget *parent) :
     _to = new QLineEdit();
     _to->setInputMask("000.000.000.000");
 
+    _supprimer = new QPushButton();
+    _supprimer->setIcon(QIcon("trash.png"));
+
     _layout->addWidget(_dst_ip_label);
     _layout->addWidget(_dst_ip);
     _layout->addWidget(_dst_masque_label);
     _layout->addWidget(_dst_masque);
     _layout->addWidget(_to_label);
     _layout->addWidget(_to);
+    _layout->addWidget(_supprimer);
 
     this->setLayout(_layout);
 }

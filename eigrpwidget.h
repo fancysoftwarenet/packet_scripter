@@ -30,6 +30,7 @@ private:
     QLineEdit* _masque;
 
     QPushButton* _supprimer;
+    // TODO: Gérer la sauvegarde et le delete dans la bdd (mettre en place des id ?)
 };
 
 #endif // EIGRPWIDGET_H

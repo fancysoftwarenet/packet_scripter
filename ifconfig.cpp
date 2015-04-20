@@ -41,6 +41,7 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
     {
         _routage = new QPushButton("Routage...");
         _layout->addRow(_routage);
+        QObject::connect(_routage, SIGNAL(clicked()), this, SLOT(sl_routage()));
 
         _dhcp = new QPushButton("DHCP...");
         _layout->addRow(_dhcp);
@@ -96,6 +97,12 @@ void IfConfig::sl_save_conf()
     }
 
     emit si_modif();
+}
+
+void IfConfig::sl_routage()
+{
+    _fen_routage = new FenRoutage();
+    _fen_routage->show();
 }
 
 QString IfConfig::getNom()
