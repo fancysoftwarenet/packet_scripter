@@ -8,7 +8,7 @@ ScriptWidget::ScriptWidget(QWidget *parent) :
     _texte = new QTextEdit();
     _texte->setReadOnly(true);
 
-    _selectionner = new QPushButton("Sélectionner tout");
+    _selectionner = new QPushButton("SÃ©lectionner tout");
     QObject::connect(_selectionner, SIGNAL(clicked()), this, SLOT(sl_selectionner()));
 
     _layout->addWidget(_texte);
@@ -31,7 +31,7 @@ void ScriptWidget::sl_genere_script()
             "password cisco\n"
             "login\n"
             "exit\n"
-            "line vty 0-15\n"
+            "line vty 0 15\n"
             "password cisco\n"
             "login\n"
             "do wr\n";
