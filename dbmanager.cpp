@@ -210,7 +210,7 @@ QString DBManager::getStatic(QString colonne, int line)
     {
         cout << "DBManager::getStatic(QString colonne, int id) returned NULL with:\n"
                 "\tcolonne = " << colonne.toStdString() << "\n"
-                "\tid = " << id << "\n";
+                "\tline = " << line << "\n";
         return NULL;
     }
     for ( int i = 0 ; i < line ; i++ )
@@ -223,7 +223,7 @@ bool DBManager::putStatic(int id, QString dst, QString masque, QString vers)
 {
     QSqlQuery req(_bdd);
 
-    if ( !req.exec("INSERT INTO static (id, dst, masque, vers) VALUES " + QString::number(id) + ", '" + ip + "', '" + masque + "', '" + vers + "')" ))
+    if ( !req.exec("INSERT INTO static (id, dst, masque, vers) VALUES " + QString::number(id) + ", '" + dst + "', '" + masque + "', '" + vers + "')" ))
     {
         cout << "DBManager::putStatic(int id, QString dst, QString masque, QString vers) returned FALSE\n";
         return false;

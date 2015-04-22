@@ -24,6 +24,7 @@ public:
     QString getStatic(QString colonne, int line);
     bool putStatic(int id, QString dst, QString masque, QString vers);
     bool updateStatic(int id, QString dst, QString masque, QString vers);
+
     int getEigrpCount();
     QString getEigrpInfo(QString colonne, int AS, int line);
     int getEigrpAS(int line);

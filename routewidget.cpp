@@ -9,7 +9,7 @@ RouteWidget::RouteWidget(int id, QWidget *parent) :
     _protocole->addItem("EIGRP");
     _protocole->addItem("Statique");
     QObject::connect(_protocole, SIGNAL(currentIndexChanged(int)), this, SLOT(sl_prot_change(int)));
-    _eigrp = new EigrpWidget();
+    _eigrp = new EigrpWidget(id);
 
     _layout->addWidget(_protocole);
     _layout->addWidget(_eigrp);
@@ -27,7 +27,7 @@ void RouteWidget::sl_prot_change(int a)
         {
             delete _layout->itemAt(_layout->count()-1)->widget();
         }//*
-        _eigrp = new EigrpWidget();
+        _eigrp = new EigrpWidget(_id);
         _layout->addWidget(_eigrp);//*/
         break;
 

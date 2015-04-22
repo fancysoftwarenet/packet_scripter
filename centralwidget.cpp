@@ -81,8 +81,6 @@ void CentralWidget::sl_if_conf_change(QString nom, int id, enum if_type type)
     if (_if_config != NULL)
     {
         _if_layout->removeWidget(_if_config);
-
-        delete _if_config;
     }
 
     _if_config = new IfConfig(nom, id, type);

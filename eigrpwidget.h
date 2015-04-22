@@ -7,12 +7,13 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include "dbmanager.h"
 
 class EigrpWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit EigrpWidget(QWidget *parent = 0);
+    explicit EigrpWidget(int id, QWidget *parent = 0);
     
 signals:
     
@@ -20,6 +21,8 @@ public slots:
     void sl_delete();
 
 private:
+    int _id;
+    DBManager _dm;
     QHBoxLayout* _layout;
 
     QLabel* _as_label;

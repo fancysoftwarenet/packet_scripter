@@ -6,7 +6,7 @@ ScriptWidget::ScriptWidget(QWidget *parent) :
     _layout = new QVBoxLayout();
 
     _texte = new QTextEdit();
-    _texte->setReadOnly(true);
+    _texte->setReadOnly(false);
 
     _selectionner = new QPushButton("Sélectionner tout");
     QObject::connect(_selectionner, SIGNAL(clicked()), this, SLOT(sl_selectionner()));

@@ -1,7 +1,7 @@
 #include "eigrpwidget.h"
 
-EigrpWidget::EigrpWidget(QWidget *parent) :
-    QWidget(parent)
+EigrpWidget::EigrpWidget(int id, QWidget *parent) :
+    QWidget(parent), _dm(), _id(id)
 {
     _layout = new QHBoxLayout();
 
