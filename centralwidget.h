@@ -10,6 +10,7 @@
 #include "if_list.h"
 #include "ifconfig.h"
 #include "scriptwidget.h"
+#include "dbmanager.h"
 
 class CentralWidget : public QWidget
 {

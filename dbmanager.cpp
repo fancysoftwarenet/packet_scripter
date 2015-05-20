@@ -18,22 +18,26 @@ TABLE static
 
 using namespace std;
 
+DBManager* DBManager::_instance = 0;
+QSqlDatabase* DBManager::_bdd;
+
 DBManager::DBManager()
 {
-    _bdd = QSqlDatabase::addDatabase("QSQLITE");
+    _bdd = new QSqlDatabase();
+    *_bdd = QSqlDatabase::addDatabase("QSQLITE");
 
-    _bdd.setHostName("localhost");
-    _bdd.setDatabaseName("packet_scripter");
-    _bdd.setUserName("root");
-    _bdd.setPassword("");
+    _bdd->setHostName("localhost");
+    _bdd->setDatabaseName("packet_scripter");
+    _bdd->setUserName("root");
+    _bdd->setPassword("");
 
-    if ( ! _bdd.open() )
+    if ( ! _bdd->open() )
     {
-        QMessageBox::critical(NULL, "Attention", "Il y a eu une erreur à l'ouverture de la base de données.\n\n" + _bdd.lastError().text());
+        QMessageBox::critical(NULL, "Attention", "Il y a eu une erreur à l'ouverture de la base de données.\n\n" + _bdd->lastError().text());
         exit(-1);
     }
 
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( !req.exec("CREATE TABLE IF NOT EXISTS interfaces ( id INTEGER PRIMARY KEY AUTOINCREMENT, nom STRING NOT NULL, ip VARCHAR2 NOT NULL, masque VARCHAR2 NOT NULL, passerelle VARCHAR2)"))
         QMessageBox::critical(NULL, "Erreur critique", "Impossible de créer la table pour la base de données, le programme peut ne pas fonctionner correctement\nErreur: <b>" + req.lastError().text() + "</b>.");
@@ -43,13 +47,24 @@ DBManager::DBManager()
         QMessageBox::critical(NULL, "Erreur critique", "Impossible de créer la table pour la base de données, le programme peut ne pas fonctionner correctement\nErreur: <b>" + req.lastError().text() + "</b>.");
 }
 
+DBManager* DBManager::getInstance()
+{
+    if ( !_instance)
+    {
+        DBManager* tmp = new DBManager();
+        _instance = tmp;
+    }
+
+    return _instance;
+}
+
 QString DBManager::getInterface(QString colonne, QString nom_interface)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( req.exec("SELECT " + colonne + " FROM interfaces WHERE nom='" + nom_interface + "'") && req.first() )
     {
-        return req.value(0).toString();
+         return req.value(0).toString();
     }
 
     return NULL;
@@ -64,15 +79,19 @@ QString DBManager::getInterface(QString colonne, int line)
         for ( int i = 0 ; i < line ; i++ )
             req.next();
 
-        return req.value(0).toString();
+         return req.value(0).toString();
+    }
+    else
+    {
+        QMessageBox::critical(NULL, "Erreur", "Problème lors de la lecture de la base de données.\n<b>" + req.lastError().text() + ".</b>");
     }
 
-    return NULL;
+     return NULL;
 }
 
 bool DBManager::putInterface(QString nom, QString ip, QString masque, QString passerelle)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( !req.exec("INSERT INTO interfaces (nom, ip, masque, passerelle) VALUES ('" + nom + "', '" + ip + "', '" + masque + "', '" + passerelle + "') "))
     {
@@ -85,7 +104,7 @@ bool DBManager::putInterface(QString nom, QString ip, QString masque, QString pa
 
 bool DBManager::putInterface(int id, QString nom, QString ip, QString masque, QString passerelle)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( !req.exec("INSERT INTO interfaces (id, nom, ip, masque, passerelle) VALUES (" + QString::number(id) + ", '" + nom + "', '" + ip + "', '" + masque + "', '" + passerelle + "') "))
     {
@@ -98,7 +117,7 @@ bool DBManager::putInterface(int id, QString nom, QString ip, QString masque, QS
 
 bool DBManager::update(QString nom, QString ip, QString masque, QString passerelle)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( ! req.exec("UPDATE interfaces SET ip='" + ip + "', masque='" + masque + "', passerelle='" + passerelle + "' WHERE nom='" + nom + "'") )
     {
@@ -109,9 +128,32 @@ bool DBManager::update(QString nom, QString ip, QString masque, QString passerel
         return true;
 }
 
+bool DBManager::remove(QString table, int id)
+{
+    QSqlQuery req(*_bdd);
+
+    if ( !req.exec("DELETE FROM " + table + " WHERE id=" + QString::number(id)))
+    {
+        qDebug() << "ERROR: DBManager::remove(QString, int) returned false.\n\tREQUEST: " << req.lastQuery() << "\n\tREASON: " << req.lastError().text();
+        return false;
+    }
+
+    for ( int i = id+1 ; i < getCount(table) ; i++)
+    {
+        if ( !req.exec("UPDATE " + table + " SET id=" + QString::number(i-1) + " WHERE id=" + QString::number(i)))
+        {
+            qDebug() << "ERROR: DBManager::remove(QString, int) returned false.\n\tREQUEST: " << req.lastQuery() << "\n\tREASON: " << req.lastError().text();
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
 bool DBManager::clearTable(QString table)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     return req.exec("DELETE FROM " + table);
 }
@@ -120,76 +162,68 @@ int DBManager::getCount(QString table)
 {
     QSqlQuery req;
     if ( req.exec("SELECT COUNT(id) FROM " + table) && req.first() )
-        return req.value(0).toInt();
+         return req.value(0).toInt();
     else
-        return -1;
+         return -1;
 }
 
 int DBManager::getEigrpCount()
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( req.exec("SELECT COUNT(id) FROM eigrp") && req.first() )
-        return req.value(0).toInt();
+         return req.value(0).toInt();
 
-    std::cout << "DBManager::getEigrpCount() returned -1" << std::endl;
+    qDebug() << "DBManager::getEigrpCount() returned -1";
     return -1;
 }
 
 int DBManager::getStaticCount()
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( req.exec("SELECT COUNT(id) FROM static") && req.first() )
-        return req.value(0).toInt();
+         return req.value(0).toInt();
 
-    cout << "DBManager::getStaticCount() returned -1" << endl;
-    return -1;
+    qDebug() << "DBManager::getStaticCount() returned -1";
+     return -1;
 }
 
-int DBManager::getEigrpAS(int line)
+int DBManager::getEigrpAS(int id)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
-    if ( !(req.exec("SELECT as_num FROM eigrp") && req.first()) )
+    if ( !(req.exec("SELECT as_num FROM eigrp WHERE id=" + QString::number(id)) && req.first()) )
     {
-        cout << "DBManager::getEigrpAs(int line) returned -1";
+        qDebug() << "DBManager::getEigrpAs(int line) returned -1";
         return -1;
     }
-
-    for ( int i = 0 ; i < line ; i++ )
-        req.next();
 
     return req.value(0).toInt();
 }
 
-QString DBManager::getEigrpInfo(QString colonne, int AS, int line)
+QString DBManager::getEigrpInfo(QString colonne, int id)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
-    if ( !(req.exec("SELECT " + colonne + " FROM eigrp WHERE as_num=" + QString::number(AS)) && req.first()) )
+    if ( !(req.exec("SELECT " + colonne + " FROM eigrp WHERE id=" + QString::number(id)) && req.first()) )
     {
-        cout << "DBManager::EigrpInfo returned NULL\n"
-                "\tcolonne: " << colonne.toStdString() << "\n"
-                "\tAS: " << AS << "\n"
-                "\tline: " << line << "\n";
+        qDebug() << "DBManager::getEigrpInfo returned NULL\n\tcolonne: " << colonne << "\n\tid: " << id << "\n";
 
-        return NULL;
+         return NULL;
     }
 
-    for ( int i = 0 ; i < line ; i++ )
-        req.next();
     return req.value(0).toString();
 }
 
 vector<int> DBManager::getAllEigrpAS()
 {
     vector<int> v(0);
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( !(req.exec("SELECT DISTINCT as_num FROM eigrp") && req.first()) )
     {
-        cout << "DBManager::getAllEigrpAs() returned an EMPTY ARRAY\n";
+        qDebug() << "DBManager::getAllEigrpAs() returned an EMPTY ARRAY\n";
         return v;
     }
 
@@ -204,14 +238,14 @@ vector<int> DBManager::getAllEigrpAS()
 
 QString DBManager::getStatic(QString colonne, int line)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
     if ( !(req.exec("SELECT " + colonne + "FROM static") && req.first()) )
     {
-        cout << "DBManager::getStatic(QString colonne, int id) returned NULL with:\n"
+        cout << "DBManager::getStatic(QString colonne, int id) ed return NULL with:\n"
                 "\tcolonne = " << colonne.toStdString() << "\n"
                 "\tline = " << line << "\n";
-        return NULL;
+         return NULL;
     }
     for ( int i = 0 ; i < line ; i++ )
         req.next();
@@ -221,11 +255,11 @@ QString DBManager::getStatic(QString colonne, int line)
 
 bool DBManager::putStatic(int id, QString dst, QString masque, QString vers)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
-    if ( !req.exec("INSERT INTO static (id, dst, masque, vers) VALUES " + QString::number(id) + ", '" + dst + "', '" + masque + "', '" + vers + "')" ))
+    if ( !req.exec("INSERT INTO static (id, dst, masque, vers) VALUES (" + QString::number(id) + ", '" + dst + "', '" + masque + "', '" + vers + "')" ))
     {
-        cout << "DBManager::putStatic(int id, QString dst, QString masque, QString vers) returned FALSE\n";
+        cout << "DBManager::putStatic(int id, QString dst, QString masque, QString vers) returned false\n";
         return false;
     }
     return true;
@@ -233,11 +267,12 @@ bool DBManager::putStatic(int id, QString dst, QString masque, QString vers)
 
 bool DBManager::updateStatic(int id, QString dst, QString masque, QString vers)
 {
-    QSqlQuery req(_bdd);
+    QSqlQuery req(*_bdd);
 
-    if ( !req.exec("UPDATE static SET dst='" + dst + "', masque='" + masque + "', vers='" + vers + "' WHERE id=" + QString::number(id)) )
+    if ( !req.exec("UPDATE static SET id=" + QString::number(id) + ", dst='" + dst + "', masque='" + masque + "', vers='" + vers + "' WHERE id=" + QString::number(id)) )
     {
-        cout << "DBManager::updateStatic(int id, QString dst, QString masque, QString vers) returned FALSE\n";
+        cout << "DBManager::updateStatic(int id, QString dst, QString masque, QString vers) returnreturned false";
+        cout << "\n\tREQUEST: " << req.lastQuery().toStdString() << "\n\tREASON: " << req.lastError().text().toStdString() << endl;
         return false;
     }
     return true;
@@ -245,22 +280,25 @@ bool DBManager::updateStatic(int id, QString dst, QString masque, QString vers)
 
 bool DBManager::putEigrp(int id, int as_num, QString ip, QString masque)
 {
-    QSqlQuery req(_bdd);
-    if ( !req.exec("INSERT INTO eigrp (id, as_num, ip, masque) VALUES (" + QString::number(id) + ", " + QString::number(as_num) + "', '" + ip + "', '" + masque) )
+    QSqlQuery req(*_bdd);
+    if ( !req.exec("INSERT INTO eigrp (id, as_num, ip, masque) VALUES (" + QString::number(id) + ", " + QString::number(as_num) + ", '" + ip + "', '" + masque + "')") )
     {
-        cout << "ERROR: DBManager::putEigrp(int id, int as_num, QString ip, QString masque) returned false\n";
+        cout << "ERROR: DBManager::putEigrp(int id, int as_num, QString ip, QString masque) returnreturned false\nREASON: " << req.lastError().text().toStdString();
         return false;
     }
     return true;
 }
 
-bool DBManager::updateEigrp(int id, int as_num, QString ip, QString masque)
+bool DBManager::updateEigrp(int id_in_db, int new_id, int as_num, QString ip, QString masque)
 {
-    QSqlQuery req(_bdd);
+    qDebug() << "Entree dans DBManager::updateEigrp(int id, int as_num, QString ip, QString masque)\n\tid_in_db = " << id_in_db;
+    qDebug() << "\tnew_id = " << new_id << "\n\tas_num = " << as_num << "\n\tip = " << ip << "\n\tmasque = " << masque;
 
-    if ( !req.exec("UPDATE eigrp SET as_num=" + QString::number(as_num) + ", ip='" + ip + "', masque='" + masque + "' WHERE id=" + QString::number(id)) )
+    QSqlQuery req(*_bdd);
+
+    if ( !req.exec("UPDATE eigrp SET id=" + QString::number(new_id) + ", as_num=" + QString::number(as_num) + ", ip='" + ip + "', masque='" + masque + "' WHERE id=" + QString::number(id_in_db)) )
     {
-        cout << "ERREUR: DBManager::updateEigrp(int id, int as_num, QString ip, QString masque) returned false\n";
+        qDebug() << "ERREUR: DBManager::updateEigrp(int id, int as_num, QString ip, QString masque) returnreturned false\n\tREQUEST: " << req.lastQuery() << "\n\tREASON: " << req.lastError().text();
         return false;
     }
     return true;
@@ -268,5 +306,4 @@ bool DBManager::updateEigrp(int id, int as_num, QString ip, QString masque)
 
 DBManager::~DBManager()
 {
-    _bdd.close();
 }

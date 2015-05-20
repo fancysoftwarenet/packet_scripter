@@ -3,9 +3,12 @@
 CentralWidget::CentralWidget(QWidget *parent) :
     QWidget(parent)
 {
-    DBManager dm;
-    dm.clearTable("interfaces");
 
+//*
+    DBManager::getInstance()->clearTable("interfaces");
+    DBManager::getInstance()->clearTable("eigrp");
+    DBManager::getInstance()->clearTable("static");
+//*/
     _main_layout = new QHBoxLayout();
 
 /** La GroupBox paramètres **/
@@ -60,8 +63,7 @@ CentralWidget::CentralWidget(QWidget *parent) :
 
 void CentralWidget::sl_change_equipement(QString s)
 {
-    DBManager dm;
-    dm.clearTable("interfaces");
+    DBManager::getInstance()->clearTable("interfaces");
 
     _param_layout->removeWidget(_if_list);
     delete _if_list;

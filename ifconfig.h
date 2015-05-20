@@ -30,7 +30,6 @@ public slots:
 private:
     int _id;
     if_type _type;
-    DBManager _dm;
 
     QFormLayout* _layout;
 

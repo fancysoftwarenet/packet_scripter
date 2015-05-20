@@ -1,8 +1,9 @@
 #include "ifconfig.h"
 
 IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
-    QWidget(parent), _dm(), _type(type), _id(id)
+    QWidget(parent), _id(id), _type(type)
 {
+
     _layout = new QFormLayout();
     _nom = new QLabel("<b><span style=\"color: green\">" + nom + "</span></b>");
     _nom->setAlignment(Qt::AlignCenter);
@@ -61,13 +62,13 @@ IfConfig::IfConfig(QString nom, int id, enum if_type type, QWidget *parent) :
     QObject::connect(_sauvegarder, SIGNAL(clicked()), this, SLOT(sl_modif()));
     _layout->addRow(_sauvegarder);
 
-    if ( _dm.getInterface("nom", getNom()) != NULL )
+    if ( DBManager::getInstance()->getInterface("nom", getNom()) != NULL )
     {
-        _ip->setText( _dm.getInterface("ip", getNom()));
-        _masque->setText( _dm.getInterface("masque", getNom()));
+        _ip->setText( DBManager::getInstance()->getInterface("ip", getNom()));
+        _masque->setText( DBManager::getInstance()->getInterface("masque", getNom()));
 
         if ( type == FA )
-            _passerelle->setText(_dm.getInterface("passerelle", getNom()));
+            _passerelle->setText(DBManager::getInstance()->getInterface("passerelle", getNom()));
     }
     this->setLayout(_layout);
 }
@@ -81,19 +82,19 @@ void IfConfig::sl_modif()
 
 void IfConfig::sl_save_conf()
 {
-    if ( _dm.getInterface("nom", getNom()) != NULL )
+    if ( DBManager::getInstance()->getInterface("nom", getNom()) != NULL )
     {
         if ( _type == FA )
-            _dm.update(getNom(), _ip->text(), _masque->text(), _passerelle->text());
+            DBManager::getInstance()->update(getNom(), _ip->text(), _masque->text(), _passerelle->text());
         else
-            _dm.update(getNom(), _ip->text(), _masque->text(), "...");
+            DBManager::getInstance()->update(getNom(), _ip->text(), _masque->text(), "...");
     }
     else
     {
         if ( _type == FA )
-            _dm.putInterface(_id, getNom(), _ip->text(), _masque->text(), _passerelle->text());
+            DBManager::getInstance()->putInterface(_id, getNom(), _ip->text(), _masque->text(), _passerelle->text());
         else
-            _dm.putInterface(_id, getNom(), _ip->text(), _masque->text(), "...");
+            DBManager::getInstance()->putInterface(_id, getNom(), _ip->text(), _masque->text(), "...");
     }
 
     emit si_modif();

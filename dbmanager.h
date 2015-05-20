@@ -9,8 +9,7 @@ class DBManager
 {
 public:
 
-    explicit DBManager();
-    ~DBManager();
+    static DBManager *getInstance();
 
     bool clearTable(QString table = "interfaces");
     int getCount(QString table = "interfaces");
@@ -19,6 +18,7 @@ public:
     bool putInterface(QString nom, QString ip, QString masque, QString passerelle);
     bool putInterface(int id, QString nom, QString ip, QString masque, QString passerelle);
     bool update(QString nom, QString ip, QString masque, QString passerelle);
+    bool remove(QString table, int id);
 
     int getStaticCount();
     QString getStatic(QString colonne, int line);
@@ -26,15 +26,20 @@ public:
     bool updateStatic(int id, QString dst, QString masque, QString vers);
 
     int getEigrpCount();
-    QString getEigrpInfo(QString colonne, int AS, int line);
-    int getEigrpAS(int line);
+    QString getEigrpInfo(QString colonne, int id);
+    int getEigrpAS(int id);
     bool putEigrp(int id, int as_num, QString ip, QString masque);
-    bool updateEigrp(int id, int as_num, QString ip, QString masque);
+    bool updateEigrp(int id_in_db, int new_id, int as_num, QString ip, QString masque);
     std::vector<int> getAllEigrpAS();
 
 
 private:
-    QSqlDatabase _bdd;
+    DBManager();
+
+    static DBManager* _instance;
+    static QSqlDatabase* _bdd;
+
+    ~DBManager();
 };
 
 #endif // DBMANAGER_H

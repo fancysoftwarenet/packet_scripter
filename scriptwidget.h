@@ -20,8 +20,6 @@ public slots:
     void sl_genere_script();
 
 private:
-    DBManager _dm;
-
     QVBoxLayout* _layout;
     QTextEdit* _texte;
     QPushButton* _selectionner;

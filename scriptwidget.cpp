@@ -1,7 +1,7 @@
 #include "scriptwidget.h"
 
 ScriptWidget::ScriptWidget(QWidget *parent) :
-    QWidget(parent), _dm()
+    QWidget(parent)
 {
     _layout = new QVBoxLayout();
 
@@ -36,18 +36,18 @@ void ScriptWidget::sl_genere_script()
             "login\n"
             "do wr\n";
 
-    for ( int i = 0 ; i < _dm.getCount("interfaces") ; i++ )
+    for ( int i = 0 ; i < DBManager::getInstance()->getCount("interfaces") ; i++ )
     {
         QString if_name = "";
 
-        if_name = _dm.getInterface("nom", i).left(2).toLower();
+        if_name = DBManager::getInstance()->getInterface("nom", i).left(2).toLower();
         if ( if_name == "fa" )
-            if_name += " " + _dm.getInterface("nom", i).right(3);
+            if_name += " " + DBManager::getInstance()->getInterface("nom", i).right(3);
         else if ( if_name == "se" )
-            if_name += " " + _dm.getInterface("nom", i).right(5);
+            if_name += " " + DBManager::getInstance()->getInterface("nom", i).right(5);
 
         script += "in " + if_name + "\n";
-        script += "ip ad " + _dm.getInterface("ip", i) + " " + _dm.getInterface("masque", i) + "\n";
+        script += "ip ad " + DBManager::getInstance()->getInterface("ip", i) + " " + DBManager::getInstance()->getInterface("masque", i) + "\n";
         script += "no sh\n";
     }
 

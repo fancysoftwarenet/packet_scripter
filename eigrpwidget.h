@@ -13,16 +13,21 @@ class EigrpWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit EigrpWidget(int id, QWidget *parent = 0);
-    
+    explicit EigrpWidget(QWidget *parent = 0);
+    void setId(int id);
+    void decrementId();
+
 signals:
-    
+    void si_edited();
+    void si_deleted();
+
 public slots:
     void sl_delete();
+    void sl_sauvegarder(QString s);
 
 private:
-    int _id;
     DBManager _dm;
+    int _id;
     QHBoxLayout* _layout;
 
     QLabel* _as_label;
@@ -33,7 +38,9 @@ private:
     QLineEdit* _masque;
 
     QPushButton* _supprimer;
-    // TODO: Gérer la sauvegarde et le delete dans la bdd (mettre en place des id ?)
+
+    //Debug
+    QLabel* l;
 };
 
 #endif // EIGRPWIDGET_H

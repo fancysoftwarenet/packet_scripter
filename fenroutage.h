@@ -17,6 +17,7 @@ signals:
     
 public slots:
     void sl_ajouter();
+    void sl_route_deleted(int, ROUTE_TYPE rt);
 
 private:
     QVBoxLayout* _layout;
