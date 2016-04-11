@@ -26,4 +26,4 @@ HEADERS += \
     fenroutage.h \
     routewidget.h
 
-QT += sql
+QT += sql widgets

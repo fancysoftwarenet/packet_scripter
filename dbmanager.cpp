@@ -303,7 +303,3 @@ bool DBManager::updateEigrp(int id_in_db, int new_id, int as_num, QString ip, QS
     }
     return true;
 }
-
-DBManager::~DBManager()
-{
-}

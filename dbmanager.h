@@ -38,8 +38,6 @@ private:
 
     static DBManager* _instance;
     static QSqlDatabase* _bdd;
-
-    ~DBManager();
 };
 
 #endif // DBMANAGER_H

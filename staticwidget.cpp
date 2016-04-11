@@ -1,8 +1,10 @@
 #include "staticwidget.h"
 
 StaticWidget::StaticWidget(QWidget *parent) :
-    QWidget(parent), _dm(), _id(_dm.getStaticCount())
+    QWidget(parent),_id(DBManager::getInstance()->getStaticCount())
 {
+    _dm = DBManager::getInstance();
+
     _layout = new QHBoxLayout();
 
     _dst_ip_label = new QLabel("IP du réseau de destination: ");
@@ -44,7 +46,7 @@ void StaticWidget::sl_delete()
     qDebug() << "Entree dans StaticWidget::sl_delete()\n";
 
     emit si_deleted();
-    _dm.remove("static", _id);
+    _dm->remove("static", _id);
     delete this;
 
     qDebug() << "Sortie de StaticWidget::sl_delete()\n";
@@ -52,10 +54,10 @@ void StaticWidget::sl_delete()
 
 void StaticWidget::sl_sauvegarder(QString s)
 {
-    if ( _dm.getStatic("ip", _id) == NULL )
-        _dm.putStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
+    if ( _dm->getStatic("ip", _id) == NULL )
+        _dm->putStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
     else
-        _dm.updateStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
+        _dm->updateStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
 
     emit si_edited();
 }
@@ -69,7 +71,7 @@ void StaticWidget::decrementId()
 {
     qDebug() << "Entree dans StaticWidget::decrementId()\n\t_id = " << _id << "\n";
     _id--;
-    _dm.updateStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
+    _dm->updateStatic(_id, _dst_ip->text(), _dst_masque->text(), _to->text());
     qDebug() << "Sortie de StaticWidget::decrementId()\n\t_id = " << _id << "\n";
 }
 

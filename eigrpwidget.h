@@ -26,7 +26,7 @@ public slots:
     void sl_sauvegarder(QString s);
 
 private:
-    DBManager _dm;
+    DBManager* _dm;
     int _id;
     QHBoxLayout* _layout;
 
